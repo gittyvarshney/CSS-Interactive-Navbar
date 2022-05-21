@@ -1,0 +1,157 @@
+*, *::after, *::before{
+    box-sizing: border-box;
+}
+
+body{
+    background-color: #333;
+    color: white
+}
+
+:root{
+    --icon-size: 2rem;
+    --nav-item-padding: calc(var(--icon-size) / 1.5);
+    --background-color: #333;
+    --border-radius: calc(var(--icon-size)/ 4);
+    --indicator-spacing: calc(var(--icon-size)/4);
+    --indicator-position: 0;
+}
+
+.navbar-container{
+    position: relative;
+    background-color: white;
+    border-radius: var(--border-radius);
+    margin-inline: auto;
+    margin-top: 10rem;
+    padding: 0 1.5rem;
+    width: max-content;
+    padding: 0 calc(var(--nav-item-padding) * 1.5);
+}
+
+.list{
+    z-index: 2;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.list .active{
+    display: inline-flex;
+}
+
+.list a{
+    position: relative;
+    color: #333;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    padding: var(--nav-item-padding);
+    align-items: center;
+    z-index: 2;
+
+}
+
+.list .text{
+    z-index: 2;
+    position: absolute;
+    font-size: 0.8em;
+    opacity: 0;
+    pointer-events: none;
+    bottom: calc(0.5 * var(--nav-item-padding));
+    transform: translateY(50%);
+    transition: all 500ms ease-in-out;
+    transition-property: opacity transform;
+}
+
+.list .icon{
+    position: relative;
+    z-index: 1;
+    transition: transform 250ms ease-in-out;
+}
+
+.list .icon svg{
+    display: block; /*if inline then it takes whitespace as well*/
+    fill: #333;
+    width: var(--icon-size);
+    height: var(--icon-size);
+
+}
+
+.list .active .text{
+    transform: translateY(0);
+    pointer-events: all;
+    opacity: 1;
+}
+
+.list .active .icon{
+    transform: translateY( calc(-50% - var(--nav-item-padding)));
+}
+
+.navbar-container .indicator{
+    z-index: 1;
+    display: inline-flex;
+    position: absolute;
+    left: calc( ((var(--icon-size) + (2 * var(--nav-item-padding))) * var(--indicator-position))  + var(--icon-size) );
+    width: calc( var(--icon-size) + 2 * var(--nav-item-padding));
+    height: calc( var(--icon-size) + 2 * var(--nav-item-padding));
+    transition: left 250ms ease-in-out;
+}
+
+/* defining the curvatures around the indicator */
+.navbar-container .indicator::before{
+    z-index: 2;
+    box-sizing: content-box;
+    content: "";
+    position: absolute;
+    left: calc( -1.25 * var(--indicator-spacing));
+    width: var(--border-radius);
+    height: var(--border-radius);
+    border-top-right-radius: 100%;
+    border: var(--indicator-spacing) solid var(--background-color);
+    transform: translateY(calc(-1 * var(--border-radius) ));
+    border-left: none;
+    border-bottom: none;
+}
+
+/*almost same as above*/
+.navbar-container .indicator::after{
+    box-sizing: content-box;
+    content: "";
+    position: absolute;
+    right: calc( -1.25 * var(--indicator-spacing));
+    width: var(--border-radius);
+    height: var(--border-radius);
+    border-top-left-radius: 100%;
+    border: var(--indicator-spacing) solid var(--background-color);
+    transform: translateY(calc(-1 * var(--border-radius) ));
+    border-right: none;
+    border-bottom: none;
+}
+/* curvatures ends --*/
+
+/*defining the indicator circle*/
+.navbar-container .indicator .circle{
+    z-index: 2;
+    position: relative;
+    transform: translateY(-50%);
+    border-radius: 100%;
+    margin-inline: auto;
+    width: calc(var(--icon-size)*2);
+    height: calc(var(--icon-size)*2);
+    background-color: hsl(100, 100%, 50%);
+    transform-style: preserve-3d;
+}
+
+/*defining the concentric circle around indicator with background color*/
+.navbar-container .indicator .circle::before{
+    z-index: -10;
+    content: "";
+    position: absolute;
+    transform: translateZ(-10px);
+    background-color: var(--background-color);
+    width: calc((var(--icon-size) + var(--indicator-spacing)) * 2 );
+    height: calc((var(--icon-size) + var(--indicator-spacing)) * 2);
+    top: calc( -1 * var(--indicator-spacing));
+    left: calc( -1 * var(--indicator-spacing));
+    border-radius: 100%;
+}
